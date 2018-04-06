@@ -11,7 +11,7 @@ Metadata:
           - SSHCidr
 
       - Label: 
-          default: "Host settings"
+          default: "Host Settings"
         Parameters: 
           - ImageId
           - InstanceType          
@@ -19,7 +19,7 @@ Metadata:
           - KeyName
 
       - Label: 
-          default: "Runner settings"
+          default: "Runner Settings"
         Parameters: 
           - RunnerName
           - GitLabRegistrationToken          
