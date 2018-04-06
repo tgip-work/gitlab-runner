@@ -12,7 +12,6 @@ Metadata:
       - Label:
           default: "Remote access"
         Parameters:
-          - RemoteAccess
           - SshKeyName
           - SshCidr
 
@@ -34,8 +33,6 @@ Metadata:
         default: "Which VPC should the runner host be deployed to?"
       PrivateSubnetId:
         default: "Which Subnet in the VPC should the host be deployed to?"
-      RemoteAccess:
-        default: "I  want to be able to remote login via SSH to the runner host (true/false)?"
       SshKeyName:
         default: "What is the key name you want to use when accessing over SSH?"
       SshCidr:
@@ -55,13 +52,6 @@ Parameters:
   PrivateSubnetId:
     Type: AWS::EC2::Subnet::Id
     Description: The subnet to place the runner host in.
-
-  RemoteAccess:
-    Type: String
-    Default: No
-    AllowedValues:
-      - Yes
-      - No
 
   SshCidr:
     Type: String
@@ -149,6 +139,7 @@ Conditions:
       - Ref: SshKeyName
 
   Remote: !Equals [ !Ref RemoteAccess, "Yes" ]
+  HasCidr: !Not [ !Equals [ !Ref SshCidr, "" ]] 
 
 Resources:
   GitlabRunnerHost:
@@ -257,7 +248,7 @@ Resources:
 
   SSHSecurityGroupIngress:
     Type: AWS::EC2::SecurityGroupIngress
-    Condition: Remote
+    Condition: HasCidr
     Properties:
       GroupId: !Ref 'GitlabRunnerSecurityGroup'    
       IpProtocol: tcp
@@ -286,3 +277,8 @@ Outputs:
     Value: !Ref SshCidr
     Export:
       Name: !Sub ${AWS::StackName}-ssh-cidr
+  PrivateIp:
+    Description: The private IP of the host
+    Value: !GetAtt AWS::EC2::Instance.PrivateIp
+    Export:
+      Name: !Sub ${AWS::StackName}-private-ip
