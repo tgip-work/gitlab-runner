@@ -64,7 +64,7 @@ Parameters:
 
   SshKeyName:
     Type: AWS::EC2::KeyPair::KeyName    
-    Description: (Only required if you want to do remote login) The key to be associated with the runner host.    
+    Description: (Only required if you want to do remote login) The key to be associated with the runner host. Must exist in your account.    
     
   DiskSize:
     Type: String
@@ -188,7 +188,7 @@ Resources:
           mkdir /cache
 
           # Register a vanilla-runner. This runner is suitable e.g. for all other containers not needing docker commands.
-          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-vanilla --tag-list "vanilla" --executor docker --docker-image "alpine:latest" 
+          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-vanilla --run-untagged --tag-list "vanilla" --executor docker --docker-image "alpine:latest" 
 
           # Register a docker-runner. This runner is suitable e.g. for containers that need to make use of docker commands.  
           # Note! docker images will be cached on the gitlab runner host.  
