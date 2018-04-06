@@ -1,4 +1,4 @@
-Description: Creates an EC2 with GitLab Runner.
+Description: Creates an EC2 with GitLab Runner in eu-west-1.
 
 Metadata: 
   AWS::CloudFormation::Interface: 
@@ -8,7 +8,13 @@ Metadata:
         Parameters: 
           - VpcId          
           - PrivateSubnetId
-          - SSHCidr
+
+      - Label:
+          default: "Remote access"
+        Parameters:
+          - RemoteAccess
+          - SshKeyName
+          - SshCidr
 
       - Label: 
           default: "Host Settings"
@@ -16,7 +22,6 @@ Metadata:
           - ImageId
           - InstanceType          
           - DiskSize
-          - KeyName
 
       - Label: 
           default: "Runner Settings"
@@ -35,26 +40,27 @@ Parameters:
     Type: AWS::EC2::Subnet::Id
     Description: The subnet to place the runner host in.
 
-  SSHCidr:
+  RemoteAccess:
     Type: String
-    Description: The Cidr the runner host can be accessed from (avoid "0.0.0.0/0", use a Bastion host Cidr instead)
+    Default: No
+    AllowedValues:
+      - Yes
+      - No
 
-  ImageId:
-    Type: AWS::EC2::Image::Id
-    Default: ami-8fd760f6
-    Description: The AMI to be used for the server. In this case a Ubuntu Server 16.04 LTS.
+  SshCidr:
+    Type: String
+    Description: (Only required if RemoteAccess is Yes) The Cidr the runner host can be accessed from. Don't use "0.0.0.0/0", use a Bastion host Cidr instead.
 
   InstanceType:
     Type: String
     Default: t2.small
     Description: The type of the machine.
 
-  KeyName:
-    Type: AWS::EC2::KeyPair::KeyName
-    Description: The key to be associated with the machine (REQUIRED).
-    MinLength: 2
-    ConstraintDescription: Must be a valid pem file associated with the account.
-
+  SshKeyName:
+    Type: String
+    Default: ""
+    Description: (Only required if RemoteAccess is Yes) The key to be associated with the machine.    
+    
   DiskSize:
     Type: String
     Default: 100
@@ -82,14 +88,65 @@ Parameters:
     MinValue: 1
     MaxValue: 20
 
+Mappings:
+  #  These are variants of the Amazon Linux AMI with Ubuntu 16.04 LTS. Taken from https://cloud-images.ubuntu.com/locator/ec2/.
+  AmazonLinuxAMI:
+    ap-south-1:
+        AMI: ami-dba580b4
+    us-east-1:
+        AMI: ami-6dfe5010
+    ap-northeast-1:
+        AMI: ami-60a4b21c
+    eu-west-1:
+        AMI: ami-74e6b80d
+    ap-southeast-1:
+        AMI: ami-82c9ecfe
+    ca-central-1:
+        AMI: ami-9d7afcf9
+    us-west-1:
+        AMI: ami-493f2f29
+    eu-central-1:
+        AMI: ami-cd491726
+    sa-east-1:
+        AMI: ami-5782d43b
+    cn-north-1:
+        AMI: ami-fd0e1a9f
+    us-gov-west-1:
+        AMI: ami-fb77e29a
+    ap-southeast-2:
+        AMI: ami-5b10de39
+    eu-west-2:
+        AMI: ami-0871906f
+    ap-northeast-2:
+        AMI: ami-d0208fbe
+    us-west-2:
+        AMI: ami-5c97f024
+    us-east-2:
+        AMI: ami-4c281829       
+    eu-west-3:
+        AMI: ami-9a03b5e7
+
+Conditions:
+  HasKeyName:
+    Fn::Not:
+    - Fn::Equals:
+      - ''
+      - Ref: SshKeyName
+
+  Remote: !Equals [ !Ref RemoteAccess, "Yes" ]
+
 Resources:
   GitlabRunnerHost:
     Type: AWS::EC2::Instance
     Properties:
       IamInstanceProfile: !Ref GitlabRunnerInstanceProfile 
-      ImageId: !Ref ImageId
+      ImageId: !FindInMap [AmazonLinuxAMI, !Ref 'AWS::Region', AMI]
       InstanceType: !Ref InstanceType
-      KeyName: !Ref KeyName
+      KeyName: 
+        Fn::If:
+        - HasKeyName
+        - Ref: SshKeyName
+        - Ref: AWS::NoValue
       SubnetId: !Ref PrivateSubnetId
       SecurityGroupIds:
       - !Ref GitlabRunnerSecurityGroup
@@ -178,13 +235,17 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Security group for GitLab Runner Host
-      VpcId: !Ref VpcId
-      #To be able to remote to the ubuntu AMI
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: 22
-        ToPort: 22
-        CidrIp: !Ref SSHCidr
+      VpcId: !Ref VpcId      
       SecurityGroupEgress: #open for outbound traffic
         - IpProtocol: -1
           CidrIp: 0.0.0.0/0
+
+  SSHSecurityGroupIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Condition: Remote
+    Properties:
+      GroupId: !Ref 'GitlabRunnerSecurityGroup'    
+      IpProtocol: tcp
+      FromPort: 22
+      ToPort: 22
+      CidrIp: !Ref SshCidr
