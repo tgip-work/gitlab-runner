@@ -19,7 +19,6 @@ Metadata:
       - Label: 
           default: "Host Settings"
         Parameters: 
-          - ImageId
           - InstanceType          
           - DiskSize
 
@@ -30,6 +29,23 @@ Metadata:
           - GitLabRegistrationToken          
           - GitlabServer
           - ConcurrentRunners
+    ParameterLabels:
+      VpcId:
+        default: "Which VPC should the runner host be deployed to?"
+      PrivateSubnetId:
+        default: "Which Subnet in the VPC should the host be deployed to?"
+      RemoteAccess:
+        default: "I  want to be able to remote login via SSH to the runner host (true/false)?"
+      SshKeyName:
+        default: "What is the key name you want to use when accessing over SSH?"
+      SshCidr:
+        default: "From which CIDR block do you want to have remote access over SSH?"
+      RunnerName:
+        default: "What name do you want to give to the runner?"
+      GitLabRegistrationToken:
+        default: "What is the registration token for the Gitlab project this runner should connect to?"
+      GitlabServer:
+        default: "What is the URL to the Gitlab master?"
 
 Parameters:
   VpcId:
@@ -49,17 +65,17 @@ Parameters:
 
   SshCidr:
     Type: String
-    Description: (Only required if RemoteAccess is Yes) The Cidr the runner host can be accessed from. Don't use "0.0.0.0/0", use a Bastion host Cidr instead.
+    Description: (Only required if you want to do remote login) The CIDR the runner host can be accessed from. Don't use "0.0.0.0/0", use a Bastion host Cidr instead.
 
   InstanceType:
     Type: String
     Default: t2.small
-    Description: The type of the machine.
+    Description: The type and size of the host.
 
   SshKeyName:
     Type: String
     Default: ""
-    Description: (Only required if RemoteAccess is Yes) The key to be associated with the machine.    
+    Description: (Only required if you want to do remote login) The key to be associated with the runner host.    
     
   DiskSize:
     Type: String
@@ -68,17 +84,17 @@ Parameters:
 
   RunnerName:
       Type: String
-      Description: Runner name
+      Description: This name will be visible in the Runners settings in Gitlab CI/CD settings and in your build output.
       MinLength: 2          
 
   GitLabRegistrationToken:
     Type: String    
-    Description: GitLab registration token form one of your repositories (repo -> Settings -> CI/CD -> Runner settings -> Registration token under specific runners).
+    Description: GitLab registration token for one of your Gitlab projects (Gitlab project -> Settings -> CI/CD -> Runner settings -> Registration token under Specific runners).
     NoEcho: true
 
   GitlabServer:
      Type: String
-     Description: The Gitlab server to connect to.
+     Description: The URL for the Gitlab server to connect this runner to. Defaults to https://gitlab.com but can be e.g. your organization's Gitlab enterprise host.
      Default: https://gitlab.com/
 
   ConcurrentRunners:
@@ -249,3 +265,15 @@ Resources:
       FromPort: 22
       ToPort: 22
       CidrIp: !Ref SshCidr
+
+Outputs:
+  GitlabRunnerInstanceProfile:
+    Description: Instance profile to attach to Gitlab runner host. This to enable assuming of other roles, such as deploy roles.
+    Value: !Ref GitlabRunnerInstanceProfile
+    Export:
+      Name: !Sub ${AWS::StackName}-GitlabRunnerInstanceProfile
+  GitlabRunnerRole:
+    Description: Role attached to GitlabRunnerInstanceProfile.
+    Value: !GetAtt GitlabRunnerRole.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-GitlabRunnerRole
