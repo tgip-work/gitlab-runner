@@ -276,3 +276,13 @@ Outputs:
     Value: !GetAtt GitlabRunnerRole.Arn
     Export:
       Name: !Sub ${AWS::StackName}-GitlabRunnerRole
+  SSHKeyName:
+    Description: The key name provided for remote access
+    Value: !Ref SshKeyName
+    Export:
+      Name: !Sub ${AWS::StackName}-sshkeyname
+  SshCidr:
+    Description: The CIDR block provided for remote access
+    Value: !Ref SshCidr
+    Export:
+      Name: !Sub ${AWS::StackName}-ssh-cidr
