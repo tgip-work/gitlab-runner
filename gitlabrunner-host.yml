@@ -278,6 +278,6 @@ Outputs:
       Name: !Sub ${AWS::StackName}-ssh-cidr
   PrivateIp:
     Description: The private IP of the host
-    Value: !GetAtt AWS::EC2::Instance.PrivateIp
+    Value: !GetAtt GitlabRunnerHost.PrivateIp
     Export:
       Name: !Sub ${AWS::StackName}-private-ip
