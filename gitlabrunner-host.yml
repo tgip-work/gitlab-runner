@@ -138,7 +138,6 @@ Conditions:
       - ''
       - Ref: SshKeyName
 
-  Remote: !Equals [ !Ref RemoteAccess, "Yes" ]
   HasCidr: !Not [ !Equals [ !Ref SshCidr, "" ]] 
 
 Resources:
