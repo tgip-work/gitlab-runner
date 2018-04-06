@@ -1,0 +1,163 @@
+Description: Creates an EC2 with GitLab Runner.
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: The VPC to use for the runner.
+
+  PrivateSubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: The subnet to place the runner host in.
+
+  SSHCidr:
+    Type: String
+    Description: The Cidr the runner host can be accessed from (avoid "0.0.0.0/0", use a Bastion host Cidr instead)
+
+  ImageId:
+    Type: AWS::EC2::Image::Id
+    Default: ami-8fd760f6
+    Description: The AMI to be used for the server. In this case a Ubuntu Server 16.04 LTS.
+
+  InstanceType:
+    Type: String
+    Default: t2.small
+    Description: The type of the machine.
+
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: The key to be associated with the machine (REQUIRED).
+    MinLength: 2
+    ConstraintDescription: Must be a valid pem file associated with the account.
+
+  DiskSize:
+    Type: String
+    Default: 100
+    Description: The size of the volume (in GB) that will be connected to the instance.
+
+  RunnerName:
+      Type: String
+      Description: Runner name
+      MinLength: 2          
+
+  GitLabRegistrationToken:
+    Type: String    
+    Description: GitLab registration token form one of your repositories (repo -> Settings -> CI/CD -> Runner settings -> Registration token under specific runners).
+    NoEcho: true
+
+  GitlabServer:
+     Type: String
+     Description: The Gitlab server to connect to.
+     Default: https://gitlab.com/
+
+  ConcurrentRunners:
+    Type: Number
+    Description: The number of max concurrent runners the host can handle
+    Default: 4
+    MinValue: 1
+    MaxValue: 20
+
+Resources:
+  GitlabRunnerHost:
+    Type: AWS::EC2::Instance
+    Properties:
+      IamInstanceProfile: !Ref GitlabRunnerInstanceProfile 
+      ImageId: !Ref ImageId
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyName
+      SubnetId: !Ref PrivateSubnetId
+      SecurityGroupIds:
+      - !Ref GitlabRunnerSecurityGroup
+      Tags:
+      - Key: Name
+        Value: !Sub ${RunnerName}-gitlab-runner-host
+      - Key: AlwaysOn
+        Value: true
+      BlockDeviceMappings:
+      - DeviceName: "/dev/sda1"
+        Ebs:
+          DeleteOnTermination: true
+          VolumeSize:
+            Ref: DiskSize
+          VolumeType: gp2
+      UserData: 
+        'Fn::Base64': !Sub |
+          #!/bin/bash -xe
+          apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+          add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          apt-get update
+          apt-get install -y docker-ce
+
+          curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | bash
+          apt-get -y install gitlab-runner
+          
+          apt-get install -y awscli
+
+          # Configure gitlab-runner to accept up to number of concurrent runners defined in parameter ConcurrentRunners
+          sed -i.bak -r '/^concurrent = /s/[0-9]+/${ConcurrentRunners}/' /etc/gitlab-runner/config.toml
+
+          # Create a default cache directory for the cache-runner
+          mkdir /cache
+
+          # Register a vanilla-runner. This runner is suitable e.g. for all other containers not needing docker commands.
+          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-vanilla --tag-list "vanilla" --executor docker --docker-image "alpine:latest" 
+
+          # Register a docker-runner. This runner is suitable e.g. for containers that need to make use of docker commands.  
+          # Note! docker images will be cached on the gitlab runner host.  
+          #gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-docker --tag-list "docker" --executor docker --docker-image "docker:latest" --docker-volumes /var/run/docker.sock:/var/run/docker.sock
+
+          # Register runner to GitLab server
+          # Register a dind (docker in docker) runner. This runners is suitable for builds that needs to build docker images.  
+          #gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-dind --tag-list "dind" --executor docker --docker-image "docker:latest" --docker-privileged  
+
+          # Register a cache-runner. This runner is suitable e.g. for all builds that need to cache NPM packages or similar.  
+          # Note! NPM packages or similar will be cached on the gitlab runner host.  
+          #gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-cache --tag-list "cache" --executor docker --docker-image "alpine:latest" --docker-volumes /cache:/cache
+
+  GitlabRunnerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      RoleName: !Sub ${AWS::StackName}-GitlabRunnerRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+      - !Ref GitlabRunnerPolicy
+
+  GitlabRunnerInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref GitlabRunnerRole
+      InstanceProfileName: !Sub ${AWS::StackName}-GitlabRunnerInstanceProfile
+
+  GitlabRunnerPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: !Sub ${AWS::StackName}-GitlabRunnerPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+            - sts:AssumeRole
+            Resource: "*"
+
+  GitlabRunnerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for GitLab Runner Host
+      VpcId: !Ref VpcId
+      #To be able to remote to the ubuntu AMI
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: !Ref SSHCidr
+      SecurityGroupEgress: #open for outbound traffic
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
