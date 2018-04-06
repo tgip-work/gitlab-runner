@@ -73,8 +73,7 @@ Parameters:
     Description: The type and size of the host.
 
   SshKeyName:
-    Type: String
-    Default: ""
+    Type: AWS::EC2::KeyPair::KeyName    
     Description: (Only required if you want to do remote login) The key to be associated with the runner host.    
     
   DiskSize:
