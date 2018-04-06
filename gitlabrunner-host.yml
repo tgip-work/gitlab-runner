@@ -1,4 +1,31 @@
 Description: Creates an EC2 with GitLab Runner.
+
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - Label: 
+          default: "Network Configuration"
+        Parameters: 
+          - VpcId          
+          - PrivateSubnetId
+          - SSHCidr
+
+      - Label: 
+          default: "Host settings"
+        Parameters: 
+          - ImageId
+          - InstanceType          
+          - DiskSize
+          - KeyName
+
+      - Label: 
+          default: "Runner settings"
+        Parameters: 
+          - RunnerName
+          - GitLabRegistrationToken          
+          - GitlabServer
+          - ConcurrentRunners
+
 Parameters:
   VpcId:
     Type: AWS::EC2::VPC::Id
