@@ -47,11 +47,11 @@ Metadata:
 Parameters:
   VpcId:
     Type: AWS::EC2::VPC::Id
-    Description: The VPC to use for the runner. (https://console.aws.amazon.com/vpc)
+    Description: The VPC to use for the runner host. (https://console.aws.amazon.com/vpc)
 
   PrivateSubnetId:
     Type: AWS::EC2::Subnet::Id
-    Description: The subnet to place the runner host in. (https://console.aws.amazon.com/vpc)
+    Description: The Subnet to place the runner host in. (https://console.aws.amazon.com/vpc)
 
   SshCidr:
     Type: String
@@ -169,7 +169,7 @@ Resources:
       - !Ref GitlabRunnerSecurityGroup
       Tags:
       - Key: Name
-        Value: !Sub ${RunnerName}-gitlab-runner-host
+        Value: !Sub ${RunnerName}-host
       - Key: AlwaysOn
         Value: true
       BlockDeviceMappings:
