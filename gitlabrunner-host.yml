@@ -284,6 +284,7 @@ Outputs:
     Export:
       Name: !Sub ${AWS::StackName}-sshkeyname
   SshCidr:
+    Condition: HasCidr
     Description: The CIDR block provided for remote access
     Value: !Ref SshCidr
     Export:
