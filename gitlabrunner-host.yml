@@ -142,7 +142,7 @@ Conditions:
 
 Resources:
   GitlabRunnerHost:
-    Type: AWS::EC2::Instance2
+    Type: AWS::EC2::Instance
     Properties:
       IamInstanceProfile: !Ref GitlabRunnerInstanceProfile 
       ImageId: !FindInMap [AmazonLinuxAMI, !Ref 'AWS::Region', AMI]
