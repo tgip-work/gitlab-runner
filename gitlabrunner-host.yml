@@ -284,15 +284,15 @@ Outputs:
     Description: The key name provided for remote access
     Value: !Ref SshKeyName
     Export:
-      Name: !Sub ${AWS::StackName}-sshkeyname
+      Name: !Sub ${AWS::StackName}-SSHKeyName
   SshCidr:
     Condition: HasCidr
     Description: The CIDR block provided for remote access
     Value: !Ref SshCidr
     Export:
-      Name: !Sub ${AWS::StackName}-ssh-cidr
+      Name: !Sub ${AWS::StackName}-SshCidr
   PrivateIp:
     Description: The private IP of the host
     Value: !GetAtt GitlabRunnerHost.PrivateIp
     Export:
-      Name: !Sub ${AWS::StackName}-private-ip
+      Name: !Sub ${AWS::StackName}-PrivateIp
