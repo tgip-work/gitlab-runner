@@ -1,4 +1,4 @@
-Description: Creates an EC2 with GitLab Runner in eu-west-1.
+Description: Creates an EC2 with GitLab Runner.
 
 Metadata: 
   AWS::CloudFormation::Interface: 
@@ -34,7 +34,7 @@ Metadata:
       PrivateSubnetId:
         default: "Which Subnet in the VPC should the host be deployed to?"
       SshKeyName:
-        default: "What is the key name you want to use when accessing over SSH?"
+        default: "What is the key pair name you want to use when accessing over SSH?"
       SshCidr:
         default: "From which CIDR block do you want to have remote access over SSH?"
       RunnerName:
@@ -55,7 +55,7 @@ Parameters:
 
   SshCidr:
     Type: String
-    Description: (Only required if you want to do remote login) The CIDR the runner host can be accessed from. Don't use "0.0.0.0/0", use a Bastion host Cidr instead. (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html)
+    Description: (Only required if you want to do remote login) The CIDR the runner host can be accessed from. Don't use "0.0.0.0/0", use a Bastion host CIDR instead. (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html)
     AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})|^$
     ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x or empty.
 
@@ -74,8 +74,8 @@ Parameters:
     ConstraintDescription: must be a valid EC2 instance type.
 
   SshKeyName:
-    Type: AWS::EC2::KeyPair::KeyName    
-    Description: (Only required if you want to do remote login) The key to be associated with the runner host. Must exist in your account.    
+    Type: String    
+    Description: (Only required if you want to do remote login) The key pair name to be associated with the runner host. Must exist in your account. (https://console.aws.amazon.com/ec2/v2/home#KeyPairs:sort=keyName)
     
   DiskSize:
     Type: String
@@ -84,7 +84,7 @@ Parameters:
 
   RunnerName:
       Type: String
-      Description: This name will be visible in the Runners settings in Gitlab CI/CD settings and in your build output.
+      Description: This name will be visible in the Runners settings in Gitlab CI/CD settings and in your build outputs.
       MinLength: 2          
       ConstraintDescription: the runner name must consist of at least 2 characters.
 
@@ -105,6 +105,7 @@ Parameters:
     MinValue: 1
     MaxValue: 20
     ConstraintDescription: the number of concurrent runners  must be a number between 1-20.
+
 Mappings:
   #  These are variants of the Amazon Linux AMI with Ubuntu 16.04 LTS. Taken from https://cloud-images.ubuntu.com/locator/ec2/.
   AmazonLinuxAMI:
@@ -204,15 +205,15 @@ Resources:
 
           # Register a docker-runner. This runner is suitable e.g. for containers that need to make use of docker commands.  
           # Note! docker images will be cached on the gitlab runner host.  
-          #gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-docker --tag-list "docker" --executor docker --docker-image "docker:latest" --docker-volumes /var/run/docker.sock:/var/run/docker.sock
+          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-docker --tag-list "docker" --executor docker --docker-image "docker:latest" --docker-volumes /var/run/docker.sock:/var/run/docker.sock
 
           # Register runner to GitLab server
           # Register a dind (docker in docker) runner. This runners is suitable for builds that needs to build docker images.  
-          #gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-dind --tag-list "dind" --executor docker --docker-image "docker:latest" --docker-privileged  
+          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-dind --tag-list "dind" --executor docker --docker-image "docker:latest" --docker-privileged  
 
           # Register a cache-runner. This runner is suitable e.g. for all builds that need to cache NPM packages or similar.  
           # Note! NPM packages or similar will be cached on the gitlab runner host.  
-          #gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-cache --tag-list "cache" --executor docker --docker-image "alpine:latest" --docker-volumes /cache:/cache
+          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-cache --tag-list "cache" --executor docker --docker-image "alpine:latest" --docker-volumes /cache:/cache
 
   GitlabRunnerRole:
     Type: AWS::IAM::Role
@@ -279,6 +280,7 @@ Outputs:
     Export:
       Name: !Sub ${AWS::StackName}-GitlabRunnerRole
   SSHKeyName:
+    Condition: HasKeyName
     Description: The key name provided for remote access
     Value: !Ref SshKeyName
     Export:
