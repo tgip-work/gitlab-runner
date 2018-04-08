@@ -1,5 +1,8 @@
 # Gitlab runner host
 
+[![Launch Stack](https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=gitlab-runner&amp;templateURL=https://s3-eu-west-1.amazonaws.com/scaniadevtools-aws-templates/gitlabrunner-host.yml)
+
+
 This repo contains a Cloudformation template that creates an EC2 Ubuntu machine, installs Docker, aws cli and four Gitlab runners on it. The runner have the following tags:
 
 **vanilla** - A generic runner that can be used for builds not requiring Docker. This runner can pick up untagged builds as well as jobs tagged with "vanilla".
