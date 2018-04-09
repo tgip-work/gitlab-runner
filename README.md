@@ -45,7 +45,7 @@ You should also collect the following information to provide as parameters durin
 
     > **If you don't need SSH login you can ignore both AWS key pair name and CIDR.**
 - The Gitlab server URL the runner should connect to. Defaults to https://gitlab.com. 
-> If you are connecting to your organization's Gitlab Enterprise server use that Gitlab's URL. Make sure your runner host is allowed to connect to that server. Talk to your Gitlab enterprise system administration before you deploy this template.
+> If you are connecting to your organization's Gitlab Enterprise server use that Gitlab's URL. Make sure your runner host will be allowed to connect to that server and will not get blocked by e.g. firewall settings. In doubt, verify with your Gitlab enterprise system administrator before you deploy this template.
 - The Gitlab project registration token to connect the runner to the project.
   From your Gitlab project navigate to *Settings -> CI/CD -> Runner settings -> Registration token* under Specific runners.
   > <a href="https://docs.gitlab.com/ee/ci/runners/#registering-a-specific-runner-with-a-project-registration-token" target="_blank">Read more about registering runners here.</a> 
