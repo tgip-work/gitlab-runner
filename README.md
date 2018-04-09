@@ -2,6 +2,7 @@
 
 <a href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=gitlab-runner&amp;templateURL=https://s3-eu-west-1.amazonaws.com/scaniadevtools-aws-templates/gitlabrunner-host.yml" target="_blank"><img src="https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg"></a>
 
+![Gitlab](https://github.com/scaniadevtools/architecture.png "Architecture")
 
 This repo contains a Cloudformation template that creates an EC2 Ubuntu machine, installs Docker, AWS CLI and four Gitlab runners on it. The runners have the following tags:
 
@@ -34,8 +35,8 @@ To deploy the Gitlab runner template you need to have the following ready:
 
 You should also collect the following information to provide as parameters during the deployment process:
 
-- An AWS VPC id where you want to deploy the runner. (<a href="https://console.aws.amazon.com/vpc" target="_blank">Check your VPCs and subnets</a>)
-- A Subnet id of a subnet with Internet access in the VPC. 
+- The AWS VPC id where you want to deploy the runner. (<a href="https://console.aws.amazon.com/vpc" target="_blank">Check your VPCs and subnets</a>)
+- The Subnet Id of a subnet with Internet access in the VPC. 
 - If you want to be able to log in remotely using SSH for e.g. debugging you need:
   - An AWS key pair name (<a href="https://console.aws.amazon.com/ec2/v2/home#KeyPairs:sort=keyName" target="_blank">AWS Keys</a>)
 
@@ -43,6 +44,8 @@ You should also collect the following information to provide as parameters durin
     Your current IP adress can be found <a href="http://checkip.amazonaws.com/" target="_blank">here.</a>
 
     > **If you don't need SSH login you can ignore both AWS key pair name and CIDR.**
+- The Gitlab server URL the runner should connect to. Defaults to https://gitlab.com. 
+> If you are connecting to your organization's Gitlab Enterprise server use that Gitlab's URL. Make sure your runner host is allowed to connect to that server. Talk to your Gitlab enterprise system administration before you deploy this template.
 - The Gitlab project registration token to connect the runner to the project.
   From your Gitlab project navigate to *Settings -> CI/CD -> Runner settings -> Registration token* under Specific runners.
   > <a href="https://docs.gitlab.com/ee/ci/runners/#registering-a-specific-runner-with-a-project-registration-token" target="_blank">Read more about registering runners here.</a> 
