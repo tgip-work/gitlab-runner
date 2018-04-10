@@ -30,7 +30,7 @@ To deploy the Gitlab runner template you need to have the following ready:
 
 - An AWS account
 - An  account on the Gitlab server you want to connect the runner to. Could be [gitlab.com](https://gitlab.com/) or an enterprise Gitlab server.
-- A Gitlab project on the Gitlab server. If you want to hit the ground running deploying AWS resources using this Gitlab runner you can fork the <a href="https://gitlab.com/scaniadevtools/gitlab-samples/HelloWorld-CF" target="_blank">HelloWorld-CF</a>. 
+- A Gitlab project on the Gitlab server. If you want to hit the ground running deploying AWS resources using this Gitlab runner you can fork this <a href="https://gitlab.com/scaniadevtools/gitlab-samples/gitlab-aws-helloworld" target="_blank">Helloworld AWS sample</a>. 
 
 
 You should also collect the following information to provide as parameters during the deployment process:
