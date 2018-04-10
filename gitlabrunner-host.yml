@@ -201,19 +201,19 @@ Resources:
           mkdir /cache
 
           # Register a vanilla-runner. This runner is suitable e.g. for all other containers not needing docker commands.
-          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-vanilla --run-untagged --tag-list "vanilla" --locked false --executor docker --docker-image "alpine:latest" 
+          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-vanilla --run-untagged --tag-list "vanilla" --locked=false --executor docker --docker-image "alpine:latest" 
 
           # Register a docker-runner. This runner is suitable e.g. for containers that need to make use of docker commands.  
           # Note! docker images will be cached on the gitlab runner host.  
-          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-docker --tag-list "docker" --locked false  --executor docker --docker-image "docker:latest" --docker-volumes /var/run/docker.sock:/var/run/docker.sock
+          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-docker --tag-list "docker" --locked=false  --executor docker --docker-image "docker:latest" --docker-volumes /var/run/docker.sock:/var/run/docker.sock
 
           # Register runner to GitLab server
           # Register a dind (docker in docker) runner. This runners is suitable for builds that needs to build docker images.  
-          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-dind --tag-list "dind" --locked false --executor docker --docker-image "docker:latest" --docker-privileged  
+          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-dind --tag-list "dind" --locked=false --executor docker --docker-image "docker:latest" --docker-privileged  
 
           # Register a cache-runner. This runner is suitable e.g. for all builds that need to cache NPM packages or similar.  
           # Note! NPM packages or similar will be cached on the gitlab runner host.  
-          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-cache --tag-list "cache" --locked false  --executor docker --docker-image "alpine:latest" --docker-volumes /cache:/cache
+          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-cache --tag-list "cache" --locked=false  --executor docker --docker-image "alpine:latest" --docker-volumes /cache:/cache
 
   GitlabRunnerRole:
     Type: AWS::IAM::Role
