@@ -29,16 +29,16 @@ The runner host will be deployed to a security group allowing Internet access an
 To deploy the Gitlab runner template you need to have the following ready:
 
 - An AWS account
-- An  account on the Gitlab server you want to connect the runner to. Could be [gitlab.com](https://gitlab.com/) or an enterprise Gitlab server.
-- A Gitlab project on the Gitlab server. If you want to hit the ground running deploying AWS resources using this Gitlab runner you can fork this <a href="https://gitlab.com/scaniadevtools/gitlab-samples/gitlab-aws-helloworld" target="_blank">Helloworld AWS sample</a>. 
+- An  account on the Gitlab server you want to connect the runner to. Could be [gitlab.com](https://gitlab.com/) or your organization's enterprise Gitlab server.
+- A Gitlab project on the Gitlab server. Could be an empty project, we only need it do connect the runner to for the first time. 
 
 
-You should also collect the following information to provide as parameters during the deployment process:
+You should also collect the following information to provide as parameters during the installation of the runner:
 
-- The AWS VPC id where you want to deploy the runner. (<a href="https://console.aws.amazon.com/vpc" target="_blank">Check your VPCs and subnets</a>)
+- The AWS VPC id where you want to deploy the runner. (<a href="https://console.aws.amazon.com/vpc" target="_blank">Check your VPCs and subnets</a>, may require being logged in to AWS)
 - The Subnet Id of a subnet with Internet access in the VPC. 
 - If you want to be able to log in remotely using SSH for e.g. debugging you need:
-  - An AWS key pair name (<a href="https://console.aws.amazon.com/ec2/v2/home#KeyPairs:sort=keyName" target="_blank">AWS Keys</a>)
+  - An AWS key pair name (<a href="https://console.aws.amazon.com/ec2/v2/home#KeyPairs:sort=keyName" target="_blank">AWS Keys</a>, may require being logged in to AWS)
 
   - The CIDR block you want to be able to remotely SSH login from. E.g. if you want to login with SSH from your current IP adress and it is `123.234.111.222` then enter `123.234.111.222/32` as CIDR.
     Your current IP adress can be found <a href="http://checkip.amazonaws.com/" target="_blank">here.</a>
@@ -58,7 +58,7 @@ You should also collect the following information to provide as parameters durin
 Click  <a href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=gitlab-runner&amp;templateURL=https://s3-eu-west-1.amazonaws.com/scaniadevtools-aws-templates/gitlabrunner-host.yml" target="_blank"><img src="https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg"></a> 
 
 
-You can also upload the file `gitlabrunner-host.yml` in the AWS Cloudformation console of the AWS account where you want to deploy the runner. (<a href="https://eu-west-1.console.aws.amazon.com/cloudformation/home#/stacks/new" target="_blank">Click to open AWS Cloudformation console</a>)
+You can also upload the file `gitlabrunner-host.yml` in the AWS Cloudformation console of the AWS account where you want to deploy the runner. (<a href="https://eu-west-1.console.aws.amazon.com/cloudformation/home#/stacks/new" target="_blank">Click to open AWS Cloudformation console</a>, may require being logged in to AWS)
 
 Then follow the Cloudformation console instructions.
 
