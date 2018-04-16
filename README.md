@@ -62,5 +62,9 @@ You can also upload the file `gitlabrunner-host.yml` in the AWS Cloudformation c
 
 Then follow the Cloudformation console instructions.
 
+Video demonstrating the setup:
+[![Video demonstrating the setup](setup-video-thumbnail.png)](https://dreambroker.com/channel/idl7qm47/18kelvdz)
+
+
 ## Want to contribute?
 Got to the <a href="CONTRIBUTING.md">CONTRIBUTING</a> page.
