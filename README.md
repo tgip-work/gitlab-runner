@@ -1,3 +1,5 @@
+![Publish Status](https://codebuild.eu-west-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoid1hwTjBKdHB3Q3dBK1JtK3FKeDE4aTBwY01NZ09SclZHYlh1cFZhWmdUbXBqb0Z4bzlXalBxeTZUVUlUSjlJT3BEcHFtT0loK1AwOWpqQzZvMzhLcjlVPSIsIml2UGFyYW1ldGVyU3BlYyI6IkxDY0NDcHdwR0ZqSUc0ZFoiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
+
 # Gitlab runner host
 
 <a href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=gitlab-runner&amp;templateURL=https://s3-eu-west-1.amazonaws.com/scaniadevtools-aws-templates/gitlabrunner-host.yml" target="_blank"><img src="https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg"></a>
