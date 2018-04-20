@@ -65,6 +65,9 @@ Then follow the Cloudformation console instructions.
 Video demonstrating the setup. __Note! If you are setting up a Gitlab runner for your organization's enterprise Gitlab be sure to use that Gitlab's URL instead of Gitlab.com when following the steps in this video__:
 [![Video demonstrating the setup](setup-video-thumbnail.png)](https://dreambroker.com/channel/idl7qm47/50uheexk?autoplay=true)
 
+__Happy Hacking__
+
+*Scania Devtools Team*
 
 ## Want to contribute?
 Got to the <a href="CONTRIBUTING.md">CONTRIBUTING</a> page.
