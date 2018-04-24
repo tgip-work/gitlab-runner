@@ -4,7 +4,7 @@
 
 <a href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=gitlab-runner&amp;templateURL=https://s3-eu-west-1.amazonaws.com/scaniadevtools-aws-templates/gitlabrunner-host.yml" target="_blank"><img src="https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg"></a>
 
-![Gitlab](architecture.png)
+![Gitlab](images/architecture.png)
 
 This repo contains a Cloudformation template that creates an EC2 Ubuntu machine, installs Docker, AWS CLI and four Gitlab runners on it. The runners have the following tags:
 
@@ -65,11 +65,46 @@ You can also upload the file `gitlabrunner-host.yml` in the AWS Cloudformation c
 Then follow the Cloudformation console instructions.
 
 Video demonstrating the setup. __Note! If you are setting up a Gitlab runner for your organization's enterprise Gitlab be sure to use that Gitlab's URL instead of Gitlab.com when following the steps in this video__:
-[![Video demonstrating the setup](setup-video-thumbnail.png)](https://dreambroker.com/channel/idl7qm47/50uheexk?autoplay=true)
+[![Video demonstrating the setup](images/setup-video-thumbnail.png)](https://dreambroker.com/channel/idl7qm47/50uheexk?autoplay=true)
 
+## Next steps
+Now when you have a runner we encourage you to try it out. We have prepared some ready-to-go samples we suggest you start with to get the basic of using the runner to deploy AWS resources with AWS permissions, using different AWS accounts for deployment etc:
+
+* __[gitlab-aws-helloworld](https://github.com/scaniadevtools/gitlab-aws-helloworld)__ - Deploys a single AWS resource to your AWS account, a good getting-started sample
+
+* __[hello-truck-ecs](https://github.com/scaniadevtools/hello-truck-ecs)__ - A more complex project deploying a complete AWS ECS cluster to AWS with load balancer, EC2 instances, logging etc. It involves Docker images and zero-downtime deployment using two other Github repos.
+
+Additional general examples of using CI/CD in Gitlab can be found at [Gitlab](https://gitlab.com/gitlab-examples)
+
+Dotnet core developers can also generate the getting started files for the Hello-World example with the `dotnet new` command. Just install the  [Scania.Devtools.Gitlab.AWS.Templates](https://www.nuget.org/packages/Scania.Devtools.Gitlab.AWS.Templates) template generator from nuget with the command:
+
+`dotnet new -i Scania.Devtools.Gitlab.AWS.Templates`. 
+
+Read more on [https://github.com/scaniadevtools/Gitlab.AWS.Templates](https://github.com/scaniadevtools/Gitlab.AWS.Templates) 
+
+ <br>
+ <br>
+  
 __Happy Hacking__
 
 *Scania Devtools Team*
 
 ## Want to contribute?
 Got to the <a href="CONTRIBUTING.md">CONTRIBUTING</a> page.
+
+
+# Troubleshooting
+## I get Stack [gitlab-runner] alread exists error
+![](images/gitlab-runner-exists.png)
+
+This means that there is already a cloudformation stack deployed in your account with the same name you are trying to use. Either delete the existing stack or provide another (unique) name in the "Stack name" field for your stack. Note that changing the stack name effects the name of the role that is created by the stack (this name is used in later steps).
+
+## I can't find my new runner in Gitlab
+
+* Make sure you are in the right Gitlab, e.g. gitlab.com or your enterprise Gitlab.
+
+* Check the registration token used for assigning the runner to a project.
+
+* Verify that your AWS account, VPC and subnet has access to the Gitlab server
+
+
