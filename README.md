@@ -54,21 +54,23 @@ You should also collect the following information to provide as parameters durin
 
 
 ### Setup and install
+For viewing a video demonstrating the setup, click on the picture below. __Note! If you are setting up a Gitlab runner for your organization's enterprise Gitlab be sure to use that Gitlab's URL instead of Gitlab.com when following the steps in this video__
 
-#### Using the AWS console
+[![Video demonstrating the setup](images/setup-video-thumbnail.png)](https://dreambroker.com/channel/idl7qm47/50uheexk)
 
-Click  <a href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=gitlab-runner&amp;templateURL=https://s3-eu-west-1.amazonaws.com/scaniadevtools-aws-templates/gitlabrunner-host.yml" target="_blank"><img src="https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg"></a> 
+#### Setup using the AWS console
+
+Click   <a href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=gitlab-runner&amp;templateURL=https://s3-eu-west-1.amazonaws.com/scaniadevtools-aws-templates/gitlabrunner-host.yml" target="_blank"><img src="https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg"></a> and follow the instructions.
 
 
-You can also upload the file `gitlabrunner-host.yml` in the AWS Cloudformation console of the AWS account where you want to deploy the runner. (<a href="https://eu-west-1.console.aws.amazon.com/cloudformation/home#/stacks/new" target="_blank">Click to open AWS Cloudformation console</a>, may require being logged in to AWS)
+You can also upload the file `gitlabrunner-host.yml` in the AWS Cloudformation console of the AWS account where you want to deploy the runner. (<a href="https://eu-west-1.console.aws.amazon.com/cloudformation/home#/stacks/new" target="_blank">Click to open AWS Cloudformation console</a>, may require being logged in to AWS).
 
 Then follow the Cloudformation console instructions.
 
-Video demonstrating the setup. __Note! If you are setting up a Gitlab runner for your organization's enterprise Gitlab be sure to use that Gitlab's URL instead of Gitlab.com when following the steps in this video__:
-[![Video demonstrating the setup](images/setup-video-thumbnail.png)](https://dreambroker.com/channel/idl7qm47/50uheexk?autoplay=true)
+
 
 ## Next steps
-Now when you have a runner we encourage you to try it out. We have prepared some ready-to-go samples we suggest you start with to get the basic of using the runner to deploy AWS resources with AWS permissions, using different AWS accounts for deployment etc:
+Now when you have a runner we encourage you to try it out. We have prepared some ready-to-go samples we suggest you start with to get the basic of using the runner. The following examples demonstrates deploying AWS resources, AWS permissions setup, using multiple AWS accounts for deployment etc:
 
 * __[gitlab-aws-helloworld](https://github.com/scaniadevtools/gitlab-aws-helloworld)__ - Deploys a single AWS resource to your AWS account, a good getting-started sample
 
