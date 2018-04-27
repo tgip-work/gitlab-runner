@@ -106,3 +106,7 @@ This means that there is already a cloudformation stack deployed in your account
 * Check the registration token used for assigning the runner to a project.
 
 * When connecting to an enterprise Gitlab, verify that the Gitlab master allows connections from your AWS VPC your runner is setup in. Talk to your Gitlab enterprise system administrator.
+
+* The Subnet you are using might not have internet access to download the software it need for the setup. Go to VPC console and check the Route Table for the Subnet. If it looks as the picture below (i.e. no route to Internet) try another Subnet.
+
+![](privatesubnet-no-internet.png)
