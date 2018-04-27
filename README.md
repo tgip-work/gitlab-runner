@@ -105,6 +105,4 @@ This means that there is already a cloudformation stack deployed in your account
 
 * Check the registration token used for assigning the runner to a project.
 
-* Verify that your AWS account, VPC and subnet has access to the Gitlab server
-
 * When connecting to an enterprise Gitlab, verify that the Gitlab master allows connections from your AWS VPC your runner is setup in. Talk to your Gitlab enterprise system administrator.
