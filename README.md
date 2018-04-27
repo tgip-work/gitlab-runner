@@ -37,18 +37,18 @@ To deploy the Gitlab runner template you need to have the following ready:
 
 You should also collect the following information to provide as parameters during the installation of the runner:
 
-- The AWS VPC id where you want to deploy the runner. (<a href="https://console.aws.amazon.com/vpc" target="_blank">Check your VPCs and subnets</a>, may require being logged in to AWS)
-- The Subnet Id of a subnet with Internet access in the VPC. __*Tip:*__ Check that the Route Table tab on the Subnet you will use have a Destination to `0.0.0.0/0` with a specified Target in the <a href="https://console.aws.amazon.com/vpc?#subnets:" target="_blank">AWS VPC Console</a> (may require being logged in to AWS).
+- __The AWS VPC id__ where you want to deploy the runner. (<a href="https://console.aws.amazon.com/vpc" target="_blank">Check your VPCs and subnets</a>, may require being logged in to AWS)
+- __The Subnet Id__ of a subnet in the VPC. The subnet __must__ have Internet access. __*Tip:*__ Check that the Route Table tab on the Subnet you will use have a Destination to `0.0.0.0/0` with a specified Target in the <a href="https://console.aws.amazon.com/vpc?#subnets:" target="_blank">AWS VPC Console</a> (may require being logged in to AWS).
 - If you want to be able to log in remotely using SSH for e.g. debugging you need:
-  - An AWS key pair name (<a href="https://console.aws.amazon.com/ec2/v2/home#KeyPairs:sort=keyName" target="_blank">AWS Keys</a>, may require being logged in to AWS)
+  - __An AWS key pair name__ (<a href="https://console.aws.amazon.com/ec2/v2/home#KeyPairs:sort=keyName" target="_blank">AWS Keys</a>, may require being logged in to AWS)
 
-  - The CIDR block you want to be able to remotely SSH login from. E.g. if you want to login with SSH from your current IP adress and it is `123.234.111.222` then enter `123.234.111.222/32` as CIDR.
+  - __The CIDR block__ you want to be able to remotely SSH login from. E.g. if you want to login with SSH from your current IP adress and it is `123.234.111.222` then enter `123.234.111.222/32` as CIDR.
     Your current IP adress can be found <a href="http://checkip.amazonaws.com/" target="_blank">here.</a>
 
     > **If you don't need SSH login you can ignore both AWS key pair name and CIDR.**
-- The Gitlab server URL the runner should connect to. Defaults to https://gitlab.com. 
-> If you are connecting to your organization's Gitlab Enterprise server use that Gitlab's URL. Make sure your runner host will be allowed to connect to that server and not get blocked by e.g. firewall settings. In doubt, verify with your Gitlab enterprise system administrator before you install the runner.
-- The Gitlab project registration token to connect the runner to the project.
+- __The Gitlab server URL__ the runner should connect to. Defaults to `https://gitlab.com` but if you are connecting to a company Gitlab the URL is something else.. 
+> If you are connecting to your organization's Gitlab Enterprise server using that Gitlab's URL, make sure your runner host will be allowed to connect to that server and not get blocked by e.g. firewall settings. In doubt, verify with your Gitlab enterprise system administrator before you install the runner.
+- __The Gitlab project registration token__ to connect the runner to the project.
   From your Gitlab project navigate to *Settings -> CI/CD -> Runner settings -> Registration token* under Specific runners.
   > <a href="https://docs.gitlab.com/ee/ci/runners/#registering-a-specific-runner-with-a-project-registration-token" target="_blank">Read more about registering runners here.</a> 
 
