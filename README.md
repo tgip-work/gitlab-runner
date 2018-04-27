@@ -38,7 +38,7 @@ To deploy the Gitlab runner template you need to have the following ready:
 You should also collect the following information to provide as parameters during the installation of the runner:
 
 - The AWS VPC id where you want to deploy the runner. (<a href="https://console.aws.amazon.com/vpc" target="_blank">Check your VPCs and subnets</a>, may require being logged in to AWS)
-- The Subnet Id of a subnet with Internet access in the VPC. __*Tip:*__ Check the Route Table tab on the Subnet you will use have a Destination to `0.0.0.0/0` with a specified Target in the <a href="https://console.aws.amazon.com/vpc?#subnets:" target="_blank">AWS VPC Console</a> (may require being logged in to AWS).
+- The Subnet Id of a subnet with Internet access in the VPC. __*Tip:*__ Check that the Route Table tab on the Subnet you will use have a Destination to `0.0.0.0/0` with a specified Target in the <a href="https://console.aws.amazon.com/vpc?#subnets:" target="_blank">AWS VPC Console</a> (may require being logged in to AWS).
 - If you want to be able to log in remotely using SSH for e.g. debugging you need:
   - An AWS key pair name (<a href="https://console.aws.amazon.com/ec2/v2/home#KeyPairs:sort=keyName" target="_blank">AWS Keys</a>, may require being logged in to AWS)
 
