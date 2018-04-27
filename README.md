@@ -92,7 +92,7 @@ __Happy Hacking__
 *Scania Devtools Team*
 
 ## Want to contribute?
-Got to the <a href="CONTRIBUTING.md">CONTRIBUTING</a> page.
+Go to the <a href="CONTRIBUTING.md">CONTRIBUTING</a> page.
 
 
 # Troubleshooting
