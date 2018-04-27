@@ -32,7 +32,7 @@ To deploy the Gitlab runner template you need to have the following ready:
 
 - An AWS account
 - An  account on the Gitlab server you want to connect the runner to. Could be [gitlab.com](https://gitlab.com/) or your organization's enterprise Gitlab server.
-- A Gitlab project on the Gitlab server. Could be an empty project, we only need it do connect the runner to for the first time. 
+- A Gitlab project on the Gitlab server. Could be an empty project, it's needed to connect the runner for the first time. 
 
 
 You should also collect the following information to provide as parameters during the installation of the runner:
