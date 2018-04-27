@@ -109,4 +109,4 @@ This means that there is already a cloudformation stack deployed in your account
 
 * The Subnet you are using might not have internet access to download the software it need for the setup. Go to VPC console and check the Route Table for the Subnet. If it looks as the picture below (i.e. no route to Internet) try another Subnet.
 
-![](privatesubnet-no-internet.png)
+![](images/privatesubnet-no-internet.png)
