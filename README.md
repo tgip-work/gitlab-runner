@@ -96,7 +96,7 @@ Go to the <a href="CONTRIBUTING.md">CONTRIBUTING</a> page.
 
 
 # Troubleshooting
-## I get Stack [gitlab-runner] alread exists error
+## I get Stack [gitlab-runner] already exists error
 ![](images/gitlab-runner-exists.png)
 
 This means that there is already a cloudformation stack deployed in your account with the same name you are trying to use. Either delete the existing stack or provide another (unique) name in the "Stack name" field for your stack. Note that changing the stack name effects the name of the role that is created by the stack (this name is used in later steps).
