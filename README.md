@@ -2,7 +2,6 @@
 
 # Gitlab runner host
 
-<a href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=gitlab-runner&amp;templateURL=https://s3-eu-west-1.amazonaws.com/scaniadevtools-aws-templates/gitlabrunner-host.yml" target="_blank"><img src="https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg"></a>
 
 ![Gitlab](images/architecture.png)
 
@@ -56,7 +55,7 @@ You should also collect the following information to provide as parameters durin
 ### Setup and install
 For viewing a video demonstrating the setup, click on the picture below. __Note! If you are setting up a Gitlab runner for your organization's enterprise Gitlab be sure to use that Gitlab's URL instead of Gitlab.com when following the steps in this video__
 
-[![Video demonstrating the setup](images/setup-video-thumbnail.png)](https://dreambroker.com/channel/idl7qm47/50uheexk)
+[![Video demonstrating the setup](images/setup-video-thumbnail.png)](https://dreambroker.com/channel/idl7qm47/53534bms)
 
 #### Setup using the AWS console
 
