@@ -37,7 +37,10 @@ To deploy the Gitlab runner template you need to have the following ready:
 You should also collect the following information to provide as parameters during the installation of the runner:
 
 - __The AWS VPC id__ where you want to deploy the runner. (<a href="https://console.aws.amazon.com/vpc" target="_blank">Check your VPCs and subnets</a>, may require being logged in to AWS)
-- __The Subnet Id__ of a subnet in the VPC. The subnet __must__ have Internet access. __*Tip:*__ Check that the Route Table tab on the Subnet you will use have a Destination to `0.0.0.0/0` with a specified Target in the <a href="https://console.aws.amazon.com/vpc?#subnets:" target="_blank">AWS VPC Console</a> (may require being logged in to AWS).
+- __The Subnet Id__ of a subnet in the VPC. The subnet __must__ have Internet access. __*Tip:*__ Check that the Route Table tab on the Subnet you will use have a Destination to `0.0.0.0/0` with a specified Target in the <a href="https://console.aws.amazon.com/vpc?#subnets:" target="_blank">AWS VPC Console</a> (may require being logged in to AWS). An example of a subnet using a NAT gateway for providing Internet access is shown in the picture below:
+
+![Destination 0.0.0.0/0 targets a NAT gateway which provides access to Internet](images/private-subnet-ok.png)
+
 - If you want to be able to log in remotely using SSH for e.g. debugging you need:
   - __An AWS key pair name__ (<a href="https://console.aws.amazon.com/ec2/v2/home#KeyPairs:sort=keyName" target="_blank">AWS Keys</a>, may require being logged in to AWS)
 
@@ -45,6 +48,11 @@ You should also collect the following information to provide as parameters durin
     Your current IP adress can be found <a href="http://checkip.amazonaws.com/" target="_blank">here.</a>
 
     > **If you don't need SSH login you can ignore both AWS key pair name and CIDR.**
+    
+> If *"VPC", "Subnet", "NAT gateway", "AWS Keys" and "CIDR"* sounds like gobbledygook to you, talk to your AWS account or network administrator before you install the runner.
+>
+>[Learn about AWS VPC](https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html)
+
 - __The Gitlab server URL__ the runner should connect to. Defaults to `https://gitlab.com` but if you are connecting to a company Gitlab the URL is something else.. 
 > If you are connecting to your organization's Gitlab Enterprise server using that Gitlab's URL, make sure your runner host will be allowed to connect to that server and not get blocked by e.g. firewall settings. In doubt, verify with your Gitlab enterprise system administrator before you install the runner.
 - __The Gitlab project registration token__ to connect the runner to the project.
@@ -106,6 +114,6 @@ This means that there is already a cloudformation stack deployed in your account
 
 * When connecting to an enterprise Gitlab, verify that the Gitlab master allows connections from your AWS VPC your runner is setup in. Talk to your Gitlab enterprise system administrator.
 
-* The Subnet you are using might not have internet access to download the software it need for the setup. Go to the [VPC console](https://console.aws.amazon.com/vpc?#subnets) and check the Route Table for the Subnet. If it looks as the picture below (i.e. has no route to Internet) try installing in another Subnet.
+* The Subnet you are using might not have internet access to download the software it needs for the setup. Go to the [VPC console](https://console.aws.amazon.com/vpc?#subnets) and check the Route Table for the Subnet. If it looks as the picture below (i.e. has no route to Internet) try installing in another Subnet. If that does not work, talk to your AWS account or network administrator or a friend having a AWS Networking black belt or similar.
 
 ![](images/privatesubnet-no-internet.png)
