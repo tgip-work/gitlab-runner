@@ -63,7 +63,7 @@ Parameters:
     Type: String
     Default: t2.small
     Description: The type and size of the host.
-    AllowedValues: [t1.micro, t2.nano, t2.micro, t2.small, t2.medium, t2.large, m1.small,
+    AllowedValues: [t1.micro, t2.nano, t2.micro, t2.small, t2.medium, t2.large, t2.xlarge, t2.2xlarge, m1.small,
       m1.medium, m1.large, m1.xlarge, m2.xlarge, m2.2xlarge, m2.4xlarge, m3.medium,
       m3.large, m3.xlarge, m3.2xlarge, m4.large, m4.xlarge, m4.2xlarge, m4.4xlarge,
       m4.10xlarge, c1.medium, c1.xlarge, c3.large, c3.xlarge, c3.2xlarge, c3.4xlarge,
@@ -107,43 +107,42 @@ Parameters:
     ConstraintDescription: the number of concurrent runners  must be a number between 1-20.
 
 Mappings:
-  #  These are variants of the Amazon Linux AMI with Ubuntu 16.04 LTS. Taken from https://cloud-images.ubuntu.com/locator/ec2/.
+  #  These are variants of the Amazon Linux AMI with Ubuntu 16.04 LTS. Taken from https://cloud-images.ubuntu.com/locator/ec2/, filter 18.04 hvm:ebs-ssd, sorted on Zone.
   AmazonLinuxAMI:
-    ap-south-1:
-        AMI: ami-dba580b4
-    us-east-1:
-        AMI: ami-6dfe5010
-    ap-northeast-1:
-        AMI: ami-60a4b21c
-    eu-west-1:
-        AMI: ami-74e6b80d
-    ap-southeast-1:
-        AMI: ami-82c9ecfe
-    ca-central-1:
-        AMI: ami-9d7afcf9
-    us-west-1:
-        AMI: ami-493f2f29
-    eu-central-1:
-        AMI: ami-cd491726
-    sa-east-1:
-        AMI: ami-5782d43b
-    cn-north-1:
-        AMI: ami-fd0e1a9f
-    us-gov-west-1:
-        AMI: ami-fb77e29a
-    ap-southeast-2:
-        AMI: ami-5b10de39
-    eu-west-2:
-        AMI: ami-0871906f
-    ap-northeast-2:
-        AMI: ami-d0208fbe
-    us-west-2:
-        AMI: ami-5c97f024
-    us-east-2:
-        AMI: ami-4c281829       
     eu-west-3:
-        AMI: ami-9a03b5e7
-
+        AMI: ami-2b12a356
+    eu-west-2:
+        AMI: ami-299d734e
+    us-east-2:
+        AMI: ami-46fec023       
+    us-west-2:
+        AMI: ami-04f8bb7c
+    ap-southeast-2:
+        AMI: ami-20f32c42	
+    ap-northeast-2:
+        AMI: ami-6969c307	
+    cn-northwest-1:
+        AMI: ami-e1bbaf83
+    cn-north-1:
+        AMI: ami-a001dfcd
+    eu-west-1:
+        AMI: ami-477b773e
+    eu-central-1:
+        AMI: ami-b50b385e
+    ap-south-1:
+        AMI: ami-2396be4c
+    ca-central-1:
+        AMI: ami-5906853d
+    ap-southeast-1:
+        AMI: ami-053f3879
+    sa-east-1:
+        AMI: ami-4b6a3127
+    ap-northeast-1:
+        AMI: ami-5017d82f
+    us-west-1:
+        AMI: ami-ea34d089
+    us-east-1:
+        AMI: ami-85f9b8fa
 Conditions:
   HasKeyName:
     Fn::Not:
@@ -200,6 +199,9 @@ Resources:
           # Create a default cache directory for the cache-runner
           mkdir /cache
 
+          # Print out the public IP, good for debuggning
+          curl ipinfo.io/ip
+
           # Register a vanilla-runner. This runner is suitable e.g. for all other containers not needing docker commands.
           gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-vanilla --run-untagged --tag-list "vanilla" --locked=false --executor docker --docker-image "alpine:latest" 
 
@@ -209,7 +211,7 @@ Resources:
 
           # Register runner to GitLab server
           # Register a dind (docker in docker) runner. This runners is suitable for builds that needs to build docker images.  
-          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-dind --tag-list "dind" --locked=false --executor docker --docker-image "docker:latest" --docker-privileged  
+          gitlab-runner register -n -u ${GitlabServer} -r ${GitLabRegistrationToken} --name ${RunnerName}-dind --tag-list "dind" --locked=false --executor docker --docker-image "docker:stable" --docker-privileged
 
           # Register a cache-runner. This runner is suitable e.g. for all builds that need to cache NPM packages or similar.  
           # Note! NPM packages or similar will be cached on the gitlab runner host.  

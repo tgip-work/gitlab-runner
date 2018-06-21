@@ -74,6 +74,17 @@ You can also upload the file `gitlabrunner-host.yml` in the AWS Cloudformation c
 
 Then follow the Cloudformation console instructions.
 
+#### Setup using AWS CLI
+```sh
+aws cloudformation create-stack --stack-name [STACK_NAME] --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=GitLabRegistrationToken,ParameterValue=[GITLAB_TOKEN] ParameterKey=PrivateSubnetId,ParameterValue=[SUBNET_ID] ParameterKey=RunnerName,ParameterValue=[RUNNER_NAME] ParameterKey=SshCidr,ParameterValue=[SSHCIDR] ParameterKey=SshKeyName,ParameterValue=[SSH_KEYNAME] ParameterKey=VpcId,ParameterValue=[VPC_ID] --template-body file://gitlabrunner-host.yml --region [REGION]] [--profile PROFILE_NAME]
+```
+
+Example:
+
+```sh
+aws cloudformation create-stack --stack-name gitlab-runner-cli --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=GitLabRegistrationToken,ParameterValue=abcdefg1234567 ParameterKey=PrivateSubnetId,ParameterValue=subnet-abcd1234 ParameterKey=RunnerName,ParameterValue=gitlab-runner-cli ParameterKey=SshCidr,ParameterValue=127.0.0.1/32 ParameterKey=SshKeyName,ParameterValue=mykeyname ParameterKey=VpcId,ParameterValue=vpc-efgh5678 --template-body file://gitlabrunner-host.yml --region eu-west-1 --profile default
+```
+
 ## Next steps
 Now when you have a runner we encourage you to try it out. We have prepared some ready-to-go samples we suggest you start with to get the basic of using the runner. The following examples demonstrates deploying AWS resources, AWS permissions setup, using multiple AWS accounts for deployment etc:
 
@@ -109,6 +120,8 @@ This means that there is already a cloudformation stack deployed in your account
 ## I can't find my new runner in Gitlab
 
 * Make sure you are in the right Gitlab, e.g. gitlab.com or your enterprise Gitlab.
+
+* Make sure your runner was registered to the correct Gitlab, , e.g. gitlab.com or your enterprise Gitlab.
 
 * Check the registration token used for assigning the runner to a project.
 
