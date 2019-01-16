@@ -90,16 +90,6 @@ Now when you have a runner we encourage you to try it out. We have prepared some
 
 * __[gitlab-aws-helloworld](https://github.com/scaniadevtools/gitlab-aws-helloworld)__ - Deploys a single AWS resource to your AWS account, a good getting-started sample
 
-* __[hello-truck-ecs](https://github.com/scaniadevtools/hello-truck-ecs)__ - A more complex project deploying a complete AWS ECS cluster to AWS with load balancer, EC2 instances, logging etc. It involves Docker images and zero-downtime deployment using two other Github repos.
-
-Additional general examples of using CI/CD in Gitlab can be found at [Gitlab](https://gitlab.com/gitlab-examples)
-
-Dotnet core developers can also generate the getting started files for the Hello-World example with the `dotnet new` command. Just install the  [Scania.Devtools.Gitlab.AWS.Templates](https://www.nuget.org/packages/Scania.Devtools.Gitlab.AWS.Templates) template generator from nuget with the command:
-
-`dotnet new -i Scania.Devtools.Gitlab.AWS.Templates`. 
-
-Read more on [https://github.com/scaniadevtools/Gitlab.AWS.Templates](https://github.com/scaniadevtools/Gitlab.AWS.Templates) 
-
  <br>
  <br>
   
