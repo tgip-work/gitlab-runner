@@ -1,5 +1,5 @@
-![Publish Status](https://codebuild.eu-west-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoid1hwTjBKdHB3Q3dBK1JtK3FKeDE4aTBwY01NZ09SclZHYlh1cFZhWmdUbXBqb0Z4bzlXalBxeTZUVUlUSjlJT3BEcHFtT0loK1AwOWpqQzZvMzhLcjlVPSIsIml2UGFyYW1ldGVyU3BlYyI6IkxDY0NDcHdwR0ZqSUc0ZFoiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
-
+THIS REPOSITORY IS DISCONTINUED AND WILL NOT BE UPDATED ANYMORE. WE DO NOT ACCEPT ANY MORE PULL REQEUSTS. THIS RESPOSTORY WILL BE REMOVED ON MARCH 5 2019.
+=================================================================================================================================
 # Gitlab runner host
 
 
